@@ -6,7 +6,8 @@ import pandas as pd
 import math
 
 DATA_PATH = "data/wine_dataset.csv"
-
+BATCH_SIZE = 4
+EPOCHS = 2
 
 class WineDataset(Dataset):
 
@@ -25,8 +26,25 @@ class WineDataset(Dataset):
 
 
 dataset = WineDataset()
-first_data = dataset[0]
 
-print(first_data[0].numpy())
+dataloader = DataLoader(dataset=dataset,
+                        batch_size=4,
+                        shuffle=True)
+
+data_iterator = iter(dataloader)
+
+# training loop
+total_samples = dataset.__len__()
+n_iterations = math.ceil(total_samples/BATCH_SIZE)
+
+print(f"Total Samples: {total_samples}")
+print(f"Iterations: {n_iterations}")
+
+for epoch in range(EPOCHS):
+    for i, (inputs, labels) in enumerate(dataloader):
+        # forward backward, update weights
+        if (i+1) % 5 == 0:
+            print(f"epoch {epoch+1}/{EPOCHS}, step {i+1}/{n_iterations}, inputs {inputs.shape}")
+
 
 
